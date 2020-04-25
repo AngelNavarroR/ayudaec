@@ -157,7 +157,7 @@ class HelpRequest(models.Model):
         return f"{filepath}_th{extension}"
 
     def _get_city(self):
-        geolocator = Nominatim(user_agent="ayudapy")
+        geolocator = Nominatim(user_agent="ayudaec")
         cordstr = "%s, %s" % self.location.coords[::-1]
         city = ''
         try:
@@ -319,7 +319,7 @@ class Device(models.Model):
     )
 
 
-# User: to represent a user in ayudapy
+# User: to represent a user in AyudaEc
 
 class User(models.Model):
     user_iid = models.AutoField(

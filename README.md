@@ -1,4 +1,4 @@
-# ayudaPy
+# ayudaEc
 
 Platform to help people help people
 
@@ -19,7 +19,7 @@ GeoDjango https://kitcharoenp.github.io/gis/2018/06/12/geodjango_installation.ht
 
 ```
 git clone https://github.com/AngelNavarroR/ayudaec.git
-cd ayudapy
+cd ayudaec
 python3 -m venv env
 source env/bin/activate
 pip install --upgrade pip
@@ -40,7 +40,7 @@ The above command assumes that [NPM](https://www.npmjs.com/get-npm) is available
 ## Install using docker-compose
 
 ```
-git clone git@github.com:melizeche/ayudapy.git && cd ayudapy
+git clone git@github.com:AngelNavarroR/ayudaec.git && cd ayudaec
 cp conf/.env.example conf/.env # you should edit this file with your configuration
 docker-compose up -d --build
 docker-compose exec app ./manage.py migrate

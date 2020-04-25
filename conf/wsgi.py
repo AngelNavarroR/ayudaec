@@ -1,5 +1,5 @@
 """
-WSGI config for ayudapy project.
+WSGI config for AyudaEc project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
