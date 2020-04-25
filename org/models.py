@@ -51,6 +51,7 @@ class Organization(models.Model):
 class DonationCenter(models.Model):
     name = models.CharField("Nombre del lugar", max_length=200)
     phone = models.CharField("Teléfono de contacto", max_length=30, blank=True, null=True)
+    web_site = models.CharField("Pagina web", max_length=230, blank=True, null=True)
     location = models.PointField("Ubicación", srid=4326,)
     address = models.CharField(
         "Dirección",

@@ -10,6 +10,7 @@ class DonationForm(forms.ModelForm):
         fields = (
             "name",
             "phone",
+            "web_site",
             "location",
             "address",
         )
@@ -17,6 +18,7 @@ class DonationForm(forms.ModelForm):
             "location": LeafletWidget(),
             "name": forms.TextInput(attrs={"class": "input"}),
             "phone": forms.TextInput(attrs={"class": "input", "type": "tel"}),
+            "phone": forms.TextInput(attrs={"class": "input"}),
             "address": forms.TextInput(attrs={"class": "input"}),
         }
         error_messages = {
