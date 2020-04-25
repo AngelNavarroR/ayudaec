@@ -4,7 +4,7 @@ Platform to help people help people
 
 #### URL
 
-https://ayudapy.org
+https://ayudaec.org
 
 ## Requirements
 
@@ -18,7 +18,7 @@ https://ayudapy.org
 GeoDjango https://kitcharoenp.github.io/gis/2018/06/12/geodjango_installation.html
 
 ```
-git clone git@github.com:melizeche/ayudapy.git
+git clone https://github.com/AngelNavarroR/ayudaec.git
 cd ayudapy
 python3 -m venv env
 source env/bin/activate
@@ -61,29 +61,7 @@ docker-compose exec app ./manage.py migrate
 
 ## Contributors / Thanks
 
-- Agustin Gomez Mansilla https://github.com/gomezag
-- Agustín Gómez https://github.com/gomezag
-- Alejandro Duque 🇨🇴 https://github.com/aleducode
-- Axel Ferreira https://github.com/axelampro
-- Blas Isaias Fernández https://github.com/BlasFerna
-- Cabu Vallejos https://github.com/cabupy
-- Diego Allen https://github.com/dalleng
-- Diego Schulz https://github.com/dschulz
-- Diosnel Velázquez https://github.com/diosnelv
-- Felipe Hermosilla https://github.com/felipehermosilla
-- Félix Pedrozo https://github.com/X1lef
-- Grosip https://github.com/grosip
-- Guillermo Caballero https://github.com/Guillecaba
-- Jean Claude Adams https://github.com/jcroot
-- Jesus Alderete https://github.com/jesus-bucksapp
-- Joaquín Olivera https://github.com/joaquinolivera
-- Jorge Ramírez https://github.com/jorgeramirez
-- Juan Hüttemann https://github.com/juanhuttemann
-- Leonardo Carreras https://github.com/leocarreras
-- Manuel Nuñez https://github.com/manununhez
-- Miguel Báez https://github.com/migueljoba 
-- Osbarge https://github.com/osbarge
-- Pablo Santa Cruz https://github.com/pablo
+- 
 
 ## TODO
 
