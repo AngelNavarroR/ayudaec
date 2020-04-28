@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('phone', models.CharField(max_length=30, verbose_name='Teléfono de contacto')),
                 ('address', models.CharField(blank=True, help_text='Es opcional pero puede ayudar a quien quiera ayudarte saber la direccion, ciudad, barrio, referencias, o como llegar', max_length=400, null=True, verbose_name='Dirección')),
                 ('location', django.contrib.gis.db.models.fields.PointField(help_text='Seleccioná tu ubicación para que la gente pueda encontrarte, si no querés marcar tu casa una buena opción puede ser la comisaria más cercana o algún otro sitio público cercano', srid=4326, verbose_name='Ubicación')),
-                ('picture', models.ImageField(blank=True, help_text='Si querés podés adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación', null=True, upload_to=core.utils.rename_img, verbose_name='Foto')),
+                ('picture', models.ImageField(blank=True, help_text='Si querés puedes adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación', null=True, upload_to=core.utils.rename_img, verbose_name='Foto')),
                 ('active', models.BooleanField(default=True)),
                 ('added', models.DateTimeField(auto_now_add=True, null=True, verbose_name='Agregado')),
                 ('votsi', models.IntegerField(blank=True, default=0)),

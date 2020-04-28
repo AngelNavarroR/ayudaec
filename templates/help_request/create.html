@@ -24,7 +24,7 @@
         <span class="icon is-small">
           <i class="fas fa-location-arrow"></i>
         </span>
-        <span>Apreta acá voy a tratar de encontrarte</span>
+        <span>Buscar mi ubicación</span>
       </button>
       <p id="status"></p>
       <form id="form-solicitar" enctype="multipart/form-data" method="post" action="/solicitar" data-provicias="{% url 'ajax_load_provincias' %}">
@@ -44,8 +44,8 @@
             <button class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-            <li class="is-size-7"> Mové el mapa hasta donde veas tu ubicación y luego apretá en el icono <i class="fas fa-map-marker-alt"></i> y luego marcá en el mapa el punto exacto</li>
-            <li class="is-size-7"> Si te equivocaste podés apretar en el icono <i class="fas fa-edit"></i> así podés mover el marcador, una vez corregido apretar 'Grabar' </li>
+            <li class="is-size-7"> Mueve el mapa hasta donde veas tu ubicación y luego apretá en el icono <i class="fas fa-map-marker-alt"></i> y luego marcá en el mapa el punto exacto</li>
+            <li class="is-size-7"> Si te equivocaste puedes apretar en el icono <i class="fas fa-edit"></i> así puedes mover el marcador, una vez corregido apretar 'Grabar' </li>
                 <p class="image"><img src="{% static "img/ayudamapa.gif" %}" alt=""></p>
         </section>
         <footer class="modal-card-foot">
@@ -69,7 +69,7 @@
           document.getElementById('div_direccion').innerHTML = `
           <span><b>Calles</b>:${direccion.atadireccion || ''}</span><br /> 
           <span><b>Barrio</b>:${direccion.localidad || '' }</span><br /> 
-          <span><b>Ciudad</b>:${direccion.distrito || ''} <span> <span><b>Departamento</b>:${direccion.departamento || ''}</span>`;
+          <span><b>Ciudad</b>:${direccion.distrito || ''} <span> <span><b>Provincia</b>:${direccion.departamento || ''}</span>`;
           document.getElementById('id_address').value = `${direccion.direccion || ''} ${direccion.localidad || '' } ${direccion.distrito || ''} ${direccion.departamento || ''}`;
           resolve(true)
         })
@@ -83,21 +83,10 @@
 
     const status = document.querySelector('#status');
     const boton = document.querySelector('#find-me');
-/*
-    new L.Control.GeoSearch({
-      searchLabel: 'The search string',
-      notFoundMessage: 'Not found',
-      position: 'topcenter',
-      showMarker: true,
-      selected: 0,
-      providers: [{name:'GISFile', provider: new L.GeoSearch.Provider.GISFile( {type:'layer', name:'world'})},
-      {name:'Google', provider: new L.GeoSearch.Provider.Google()},
-      {name:'OpenStreetMap', provider: new L.GeoSearch.Provider.OpenStreetMap()}]
-    }).addTo(maps[0]);
-*/
-var searchLayer = L.layerGroup().addTo(maps[0]);
-//... adding data in searchLayer ...
-maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
+
+    var searchLayer = L.layerGroup().addTo(maps[0]);
+    //... adding data in searchLayer ...
+    maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
 
     function makePoint(longitude, latitude) {
       return JSON.stringify({
@@ -131,7 +120,7 @@ maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
 
       const you = L.marker([latitude, longitude], {draggable: true, opacity: 0.9, title:'Tu ubicación'}).addTo(maps[0]);
 
-      you.bindPopup('<b>Mové este punto a tu ubicación !</b>').openPopup();
+      you.bindPopup('<b>Mueve este punto a tu ubicación !</b>').openPopup();
       
       maps[0].setView([latitude, longitude], 10);
 
@@ -160,7 +149,7 @@ maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
 
       boton.textContent = 'No te encontré, seguí completando !';
       boton.disabled = true;
-      status.textContent = 'No puedo encontrarte, mové el punto mas abajo.';
+      status.textContent = 'No puedo encontrarte, mueve el punto mas abajo.';
 
       addMarker(longitude, latitude);
       
@@ -239,7 +228,10 @@ maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
           const latitude = data[0].fields.lat;
           const longitude = data[0].fields.lngt;
           console.log(latitude + ' <>' + longitude)
-          success(latitude, longitude);
+          if(latitude != 0){
+            success(latitude, longitude);
+          }
+          
           resolve(true)
         })
         .catch((error) => {

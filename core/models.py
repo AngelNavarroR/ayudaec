@@ -107,7 +107,7 @@ class HelpRequest(models.Model):
     message = models.TextField(
         "Descripción del pedido",
         help_text=mark_safe(
-            "Acá podés contar detalladamente lo que necesitás, <b>cuanto mejor cuentes tu situación es más probable que te quieran ayudar</b>"),
+            "Acá puedes contar detalladamente lo que necesitás, <b>cuanto mejor cuentes tu situación es más probable que te quieran ayudar</b>"),
         max_length=2000,
         null=True,
         db_index=True,
@@ -136,7 +136,7 @@ class HelpRequest(models.Model):
     picture = models.ImageField(
         "Foto",
         upload_to=rename_img,
-        help_text="Si querés podés adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación",
+        help_text="Si querés puedes adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación",
         null=True,
         blank=True,
     )
