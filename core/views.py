@@ -5,14 +5,16 @@ from urllib.parse import quote_plus
 
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.core.serializers import serialize
+from django.core import serializers
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.utils.mediatypes import order_by_precedence
+from django.http import HttpResponse
+
+from core.models import Provincias
 
 from .forms import HelpRequestForm
-from .models import (FrequentAskedQuestion, HelpRequest, HelpRequestOwner)
+from .models import FrequentAskedQuestion, HelpRequest, HelpRequestOwner
 from .utils import image_to_base64, text_to_image
-from core.models import Provincias
 
 
 def home(request):
@@ -161,7 +163,14 @@ def list_by_city(request, city):
 
 
 def list_provincias(request):
-        #provins = request.GET.get('provincia_id')
-        #cities = provincias.objects.filter(provincia=provins).order_by('name')
-        #provincias.objects.order_by_precedence("name")
-        return Provincias.objects.all()
+        provincias = request.GET.get('provincia_id')
+        cities = Provincias.objects.filter(id=provincias).order_by('name')
+        return cities
+
+
+def list_by_provincia(request, id):
+        city = Provincias.objects.filter(id=id)[0]
+        print("ciudad ", city)
+        #result = serializers.serialize('json', city, fields=("name", "pk", "lat", "lngt"))
+        result = serializers.serialize('json', [city], fields=("name", "pk", "lat", "lngt"))
+        return HttpResponse(result, content_type="text/json-comment-filtered")

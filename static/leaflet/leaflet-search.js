@@ -1,254 +1,52 @@
-L.Control.ResetView = L.Control.extend({
-    statics: {
-        ICON: 'url(images/reset-view.png)',
-        TITLE: "Reset view"
-    },
+/*
+	Name					Data passed			   Description
+	Managed Events:
+	 search:locationfound	{latlng, title, layer} fired after moved and show markerLocation
+	 search:expanded		{}					   fired after control was expanded
+	 search:collapsed		{}					   fired after control was collapsed
+ 	 search:cancel			{}					   fired after cancel button clicked
+	Public methods:
+	 setLayer()				L.LayerGroup()         set layer search at runtime
+	 showAlert()            'Text message'         show alert message
+	 searchText()			'Text searched'        search text by external code
+*/
 
-    options: {
-        position: 'topleft'
-    },
+//TODO implement can do research on multiple sources layers and remote		
+//TODO history: false,		//show latest searches in tooltip		
+//FIXME option condition problem {autoCollapse: true, markerLocation: true} not show location
+//FIXME option condition problem {autoCollapse: false }
+//
+//TODO here insert function  search inputText FIRST in _recordsCache keys and if not find results.. 
+//  run one of callbacks search(sourceData,jsonpUrl or options.layer) and run this.showTooltip
+//
+//TODO change structure of _recordsCache
+//	like this: _recordsCache = {"text-key1": {loc:[lat,lng], ..other attributes.. }, {"text-key2": {loc:[lat,lng]}...}, ...}
+//	in this mode every record can have a free structure of attributes, only 'loc' is required
+//TODO important optimization!!! always append data in this._recordsCache
+//  now _recordsCache content is emptied and replaced with new data founded
+//  always appending data on _recordsCache give the possibility of caching ajax, jsonp and layersearch!
+//
+//TODO here insert function  search inputText FIRST in _recordsCache keys and if not find results.. 
+//  run one of callbacks search(sourceData,jsonpUrl or options.layer) and run this.showTooltip
+//
+//TODO change structure of _recordsCache
+//	like this: _recordsCache = {"text-key1": {loc:[lat,lng], ..other attributes.. }, {"text-key2": {loc:[lat,lng]}...}, ...}
+//	in this way every record can have a free structure of attributes, only 'loc' is required
 
-    initialize: function (bounds, options) {
-        // Accept function as argument to bounds
-        this.getBounds = typeof(bounds) == 'function' ? bounds :
-            function () {
-                return bounds;
-            };
-
-        L.Util.setOptions(this, options);
-    },
-
-    onAdd: function (map) {
-        if (map.resetviewControl) {
-            map.removeControl(map.resetviewControl);
-        }
-        map.resetviewControl = this;
-
-        var container = L.DomUtil.create('div', 'leaflet-control-zoom leaflet-bar');
-        var link = L.DomUtil.create('a', 'leaflet-control-zoom-out leaflet-bar-part', container);
-        link.href = '#';
-        link.title = L.Control.ResetView.TITLE;
-        link.style.backgroundImage = L.Control.ResetView.ICON;
-
-        L.DomEvent.addListener(link, 'click', L.DomEvent.stopPropagation)
-            .addListener(link, 'click', L.DomEvent.preventDefault)
-            .addListener(link, 'click', L.Util.bind(function () {
-                map.fitBounds(this.getBounds());
-            }, this));
-        return container;
+(function (factory) {
+    if(typeof define === 'function' && define.amd) {
+    //AMD
+        define(['leaflet'], factory);
+    } else if(typeof module !== 'undefined') {
+    // Node/CommonJS
+        module.exports = factory(require('leaflet'));
+    } else {
+    // Browser globals
+        if(typeof window.L === 'undefined')
+            //throw 'Leaflet must be loaded first';
+        factory(window.L);
     }
-});
-
-
-L.Map.DjangoMap = L.Map.extend({
-
-    initialize: function (id, options) {
-        // Merge compatible options
-        // (can be undefined)
-        var djoptions = options.djoptions;
-        options.zoom = djoptions.zoom;
-        options.center = djoptions.center;
-
-        if (!isNaN(parseInt(djoptions.minzoom, 10)))
-            options.minZoom = djoptions.minzoom;
-
-        if (!isNaN(parseInt(djoptions.maxzoom, 10)))
-            options.maxZoom = djoptions.maxzoom;
-
-        // Translate to native options
-        options = L.Util.extend(options,
-            this._projectionOptions(djoptions));
-        if (djoptions.extent) {
-            options.maxBounds = djoptions.extent;
-        }
-
-        L.Map.prototype.initialize.call(this, id, options);
-
-        this._djAddLayers();
-        this._djSetupControls();
-
-        if (djoptions.fitextent && djoptions.extent && !(djoptions.center || djoptions.zoom)) {
-            this.fitBounds(options.maxBounds);
-        }
-    },
-
-    _projectionOptions: function (djoptions) {
-        if (!djoptions.srid)
-            return {};
-
-        var projopts = {};
-
-        var bbox = djoptions.tilesextent,
-            maxResolution = computeMaxResolution(bbox);
-        // See https://github.com/ajashton/TileCache/blob/master/tilecache/TileCache/Layer.py#L197
-        var resolutions = [];
-        for (var z = 0; z < 20; z++) {
-            resolutions.push(maxResolution / Math.pow(2, z));
-        }
-        var crs = new L.Proj.CRS('EPSG:' + djoptions.srid,
-            Proj4js.defs['EPSG:' + djoptions.srid],
-            {
-                origin: [bbox[0], bbox[3]],
-                resolutions: resolutions
-            });
-        return {
-            crs: crs,
-            scale: crs.scale,
-            continuousWorld: true
-        };
-
-        function computeMaxResolution(bbox) {
-            // See https://github.com/ajashton/TileCache/blob/master/tilecache/TileCache/Layer.py#L185-L196
-            var size = 256,
-                width = bbox[2] - bbox[0],
-                height = bbox[3] - bbox[1];
-            var aspect = Math.floor(Math.max(width, height) / Math.min(width, height) + 0.5);
-            return Math.max(width, height) / (size * aspect);
-        }
-    },
-
-    _djAddLayers: function () {
-        var layers = this.options.djoptions.layers;
-        var overlays = this.options.djoptions.overlays || [];
-        var continuousWorld = this.options.continuousWorld;
-
-        if (!layers || !layers.length) {
-            // No layers, we're done (ignoring overlays)
-            return;
-        }
-
-        if (layers.length == 1 && overlays.length == 0) {
-            var layer = l2d(layers[0]);
-            // Make the only layer match the map max/min_zoom
-            layer.options = L.Util.extend(layer.options, {
-                minZoom: this.options.minZoom,
-                maxZoom: this.options.maxZoom
-            });
-            L.tileLayer(layer.url, layer.options).addTo(this);
-            return;
-        }
-
-        this.layerscontrol = L.control.layers().addTo(this);
-        for (var i = 0, n = layers.length; i < n; i++) {
-            var layer = l2d(layers[i]),
-                l = L.tileLayer(layer.url, layer.options);
-            this.layerscontrol.addBaseLayer(l, layer.name);
-            // Show first one as default
-            if (i === 0) l.addTo(this);
-        }
-        for (var i = 0, n = overlays.length; i < n; i++) {
-            var layer = l2d(overlays[i]),
-                l = L.tileLayer(layer.url, layer.options);
-            this.layerscontrol.addOverlay(l, layer.name);
-        }
-
-        function l2d(l) {
-            var options = {'continuousWorld': continuousWorld};
-            if (typeof l[2] === 'string') {
-                // remain compatible with django-leaflet <= 0.15.0
-                options = L.Util.extend(options, {'attribution': l[2]});
-            } else {
-                options = L.Util.extend(options, l[2]);
-            }
-            return {name: l[0], url: l[1], options: options};
-        }
-    },
-
-    _djSetupControls: function () {
-        // Attribution prefix ?
-        if (this.attributionControl &&
-            this.options.djoptions.attributionprefix !== null) {
-            this.attributionControl.setPrefix(this.options.djoptions.attributionprefix);
-        }
-
-        // Scale control ?
-        if (this.options.djoptions.scale) {
-            this.whenReady(function () {
-                var scale_opt = this.options.djoptions.scale;
-                var show_imperial = /both|imperial/.test(scale_opt);
-                var show_metric = /both|metric/.test(scale_opt);
-                new L.Control.Scale({imperial: show_imperial, metric: show_metric}).addTo(this);
-            }, this);
-        }
-
-        // Minimap control ?
-        if (this.options.djoptions.minimap) {
-            for (var firstLayer in this._layers) break;
-            var url = this._layers[firstLayer]._url;
-            var layer = L.tileLayer(url);
-            this.minimapcontrol = null;
-            this.whenReady(function () {
-                this.minimapcontrol = new L.Control.MiniMap(layer,
-                    {toggleDisplay: true}).addTo(this);
-            }, this);
-        }
-
-        // ResetView control ?
-        if (this.options.djoptions.resetview) {
-            var bounds = this.options.djoptions.extent;
-            if (bounds) {
-                // Add reset view control
-                this.whenReady(function () {
-                    new L.Control.ResetView(bounds).addTo(this);
-                }, this);
-            }
-        }
-    }
-
-});
-
-
-L.Map.djangoMap = function (id, options) {
-    var container = L.DomUtil.get(id);
-    if (container._leaflet)  // Already initialized
-        return;
-
-    var map = new L.Map.DjangoMap(id, options);
-
-    if (options.globals) {
-        // Register document maps, like window.forms :)
-        window.maps = window.maps || [];
-        window.maps.push(map);
-    }
-
-    if (options.callback === null) {
-        /*
-         * Deprecate django-leaflet < 0.7 default callback
-         */
-        var defaultcb = window[id + 'Init'];
-        if (typeof(defaultcb) == 'function') {
-            options.callback = defaultcb;
-            if (console) console.warn('DEPRECATED: Use of default callback ' + defaultcb.name + '() is deprecated (see documentation).');
-        }
-    }
-
-    /*
-     * Trigger custom map:init Event
-     */
-    triggerEvent(window, 'map:init', {id: id, map: map, options: options});
-
-    /*
-     * Run callback if specified
-     */
-    if (typeof(options.callback) == 'function') {
-        options.callback(map, options);
-    }
-
-    return map;
-
-
-    function triggerEvent(target, type, data) {
-        if (typeof window.CustomEvent == 'function') {
-            var evt = new CustomEvent(type, {detail: data});
-            target.dispatchEvent(evt);
-        }
-        else if (window.jQuery) {
-            var evt = jQuery.Event(type);
-            evt.detail = data;
-            jQuery(target).trigger(evt);
-        }
-    }
-};
+})(function (L) {
 
 
 L.Control.Search = L.Control.extend({
@@ -1176,4 +974,19 @@ L.Control.Search.Marker = L.Marker.extend({
 		
 		return this;
 	}
+});
+
+L.Map.addInitHook(function () {
+    if (this.options.searchControl) {
+        this.searchControl = L.control.search(this.options.searchControl);
+        this.addControl(this.searchControl);
+    }
+});
+
+L.control.search = function (options) {
+    return new L.Control.Search(options);
+};
+
+return L.Control.Search;
+
 });

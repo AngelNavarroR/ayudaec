@@ -40,8 +40,8 @@ urlpatterns = [
     # login/logout
     path('accounts/', include('django.contrib.auth.urls')),
     # cargar provincias
-    
-    path('ajax/load-provincias/<int:id>', core_views.list_provincias, name='ajax_load_provincias'),  # <-- this one here
+    path('ajax/get-provincia/<slug:id>', core_views.list_by_provincia, name='provincia-by-name'),  # <-- this one here
+    path('ajax/load-provincias/', core_views.list_provincias, name='ajax_load_provincias'),  # <-- this one here
 ]
 urlpatterns += api_urls.urlpatterns
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

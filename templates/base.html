@@ -131,11 +131,12 @@
     <script
         src="https://cdn.jsdelivr.net/combine/npm/moment@2.24.0/min/moment.min.js,npm/moment@2.24.0/locale/es.js"></script>
 
-    <!-- Load Esri Leaflet Geocoder from CDN -->
-    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.3.2/dist/esri-leaflet-geocoder.css"
-        integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g==" crossorigin="">
-    <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.2/dist/esri-leaflet-geocoder.js"
-        integrity="sha512-8twnXcrOGP3WfMvjB0jS5pNigFuIWj4ALwWEgxhZ+mxvjF5/FBPVd5uAxqT8dd2kUmTVK9+yQJ4CmTmSg/sXAQ==" crossorigin=""></script>
+        <!--script src="/static/leaflet/Control.Geocoder.js"></script>
+        <link rel="stylesheet" href="/static/leaflet/Control.Geocoder.css" />
+        <script src="/static/leaflet/l.control.geosearch.js"></script>
+        <link rel="stylesheet" href="/static/leaflet/l.geosearch.css" /-->
+
+
 
     {% leaflet_js plugins="ALL" %}
     {% leaflet_css plugins="ALL" %}
@@ -143,6 +144,9 @@
 </head>
 
 <body class="Site">
+
+    <script src="/static/leaflet/leaflet-search.js"></script>
+    <link rel="stylesheet" href="/static/leaflet/leaflet-search.css" />
     <section class="is-fullwidth" style="background-color: #33CCCC; height: 10%;">
         <div
             class="column is-8-mobile is-offset-2-mobile is-4-tablet is-offset-4-tablet is-2-desktop is-offset-5-desktop ">

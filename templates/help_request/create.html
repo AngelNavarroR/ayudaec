@@ -27,7 +27,7 @@
         <span>Apreta acá voy a tratar de encontrarte</span>
       </button>
       <p id="status"></p>
-      <form enctype="multipart/form-data" method="post" action="/solicitar">
+      <form id="form-solicitar" enctype="multipart/form-data" method="post" action="/solicitar" data-provicias="{% url 'ajax_load_provincias' %}">
         {% csrf_token %}
         {% include 'help_request/post.html' with form=form %}
         <div class="control">
@@ -83,6 +83,21 @@
 
     const status = document.querySelector('#status');
     const boton = document.querySelector('#find-me');
+/*
+    new L.Control.GeoSearch({
+      searchLabel: 'The search string',
+      notFoundMessage: 'Not found',
+      position: 'topcenter',
+      showMarker: true,
+      selected: 0,
+      providers: [{name:'GISFile', provider: new L.GeoSearch.Provider.GISFile( {type:'layer', name:'world'})},
+      {name:'Google', provider: new L.GeoSearch.Provider.Google()},
+      {name:'OpenStreetMap', provider: new L.GeoSearch.Provider.OpenStreetMap()}]
+    }).addTo(maps[0]);
+*/
+var searchLayer = L.layerGroup().addTo(maps[0]);
+//... adding data in searchLayer ...
+maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
 
     function makePoint(longitude, latitude) {
       return JSON.stringify({
@@ -94,17 +109,28 @@
     async function addMarker(longitude, latitude) {
       document.getElementById('id_location').innerHTML = makePoint(longitude, latitude);
       
+/*
+      var map = maps[0];
+
+    // create the geocoding control and add it to the map
+    var searchControl = L.esri.Geocoding.geosearch().addTo(map);
+
+    // create an empty layer group to store the results and add it to the map
+    var results = L.layerGroup().addTo(map);
+
+    // listen for the results event and add every result to the map
+    searchControl.on("results", function(data) {
+        results.clearLayers(); 
+        for (var i = data.results.length - 1; i >= 0; i--) {
+          console.log('>>>>>>>>>>>>> ' + data.results[i]);  
+            results.addLayer(L.marker(data.results[i].latlng));
+        }
+    });
+    */
       await getDireccion(longitude, latitude);
 
       const you = L.marker([latitude, longitude], {draggable: true, opacity: 0.9, title:'Tu ubicación'}).addTo(maps[0]);
 
-      /*
-        icon: new L.DivIcon({
-        className: 'my-div-icon',
-        html: '<img class="my-div-image" src="{% static 'leaflet/draw/images/marker-icon-2x.png' %}"/>'+
-              '<span class="my-div-span">Tu Ubicacion</span>'
-    })
-      */
       you.bindPopup('<b>Mové este punto a tu ubicación !</b>').openPopup();
       
       maps[0].setView([latitude, longitude], 10);
@@ -195,26 +221,57 @@
     });
   });
 
+  function success(latitude, longitude) {
+    boton.textContent = 'Te ubicamos en capital, Busca tu ubicacion!';
+    boton.disabled = true;
+    status.textContent = '';
+
+    addMarker(longitude, latitude);
+  }
+
   function centerCapital(){
-    console.log('<><><' + document.querySelector("#provicia_id").value);
     id = document.querySelector("#provicia_id").value;
-    //maps[0].setView([latitude, longitude], 10);
-    
+
     return new Promise(function(resolve, reject){
-      fetch(`ajax_load_provincias/${id}`)
+      fetch(`/ajax/get-provincia/${id}`)
         .then((response) => response.json())
         .then((data) => {
-          const direccion = data.data;
-          console.log('Return data url ' + direccion)
-          
+          const latitude = data[0].fields.lat;
+          const longitude = data[0].fields.lngt;
+          console.log(latitude + ' <>' + longitude)
+          success(latitude, longitude);
           resolve(true)
         })
         .catch((error) => {
-          console.log('undifened date location...' + error)
-          resolve(true)
+          console.log('Sin datos de ciudad...' + error);
+          resolve(true);
         })
-    })
-    
+    })       
+    var map = maps[0];
+
+    // not L.esri.Geocoding.geocodeService()
+    /*
+var ccpaRoadsProvider = L.esri.Geocoding.geocodeServiceProvider({
+  url: '//gis.ccpa.net/arcgiswebadaptor/rest/services/Roads_Locator/GeocodeServer'
+});
+
+var geosearchControl = L.esri.Geocoding.geosearch({
+  providers: [ccpaRoadsProvider]
+}).addTo(map);
+
+    var geocoder = L.esri.Geocoding.geocodeService(); 
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap...</a> contributors'
+    }).addTo(map);
+    geocoder.geocode().text('New York City').run(function (error, response) {
+      if (error) {
+        return;
+      }
+      console.log('response.results[0],  ' + response.results[0]);
+      console.log('response.results[0] ' + response.results[0].bounds);
+      map.fitBounds(response.results[0].bounds);
+    });
+    */
   }
 
   document.querySelector('#find-me').addEventListener('click', geoFindMe);
