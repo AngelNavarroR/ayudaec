@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='helprequest',
             name='location',
-            field=django.contrib.gis.db.models.fields.PointField(help_text='Seleccioná tu ubicación para que la gente pueda encontrarte, si no querés marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.            <br>Si tenés problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mirá esta ayuda</a>', srid=4326, verbose_name='Ubicación'),
+            field=django.contrib.gis.db.models.fields.PointField(help_text='Seleccioná tu ubicación para que la gente pueda encontrarte, si no querés marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.            <br>Si tenés problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a>', srid=4326, verbose_name='Ubicación'),
         ),
         migrations.AlterField(
             model_name='helprequest',

@@ -27,10 +27,11 @@
                 <a href="/donaciones">
                     <article class="tile is-child notification has-text-centered" style="background-color: #6e6bd1; color: white;">
                         <p class="title is-4">¡Centros de Donación!</p>
-                        <p class="subtitle is-6 is-size-7">Mirá lo que puedes donar y dónde</p>
+                        <p class="subtitle is-6 is-size-7">Mira lo que puedes donar y dónde</p>
                     </article>
                 </a>
             </div>
+            {% if perms.org.add_donationcenter %}
           <div class="column is-3">
 {#                <a target="_blank" href="https://forms.gle/qgfZ28Vd1xUv9s9n9">#}
                 <a href="/voluntario/legal">
@@ -40,13 +41,13 @@
                     </article>
                 </a>
             </div>
-        {% if perms.org.add_donationcenter %}
+        
         <div class="column is-3">
             <a href="/donar">
                 <article class="tile is-child notification has-text-centered"
                     style="background-color: #2cceb8; color: white;">
                     <p class="title is-4">Registrar Centro de Donación</p>
-                    <p class="subtitle is-6 is-size-7">Mirá lo que puedes donar y dónde</p>
+                    <p class="subtitle is-6 is-size-7">Mira lo que puedes donar y dónde</p>
                 </article>
             </a>
         </div>
