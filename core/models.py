@@ -127,8 +127,14 @@ class HelpRequest(models.Model):
     )
     location = models.PointField(
         "Ubicación",
+<<<<<<< HEAD
         help_text=mark_safe('<p style="margin-bottom:5px;font-size:10px;">Selecciona tu ubicación para que las personas solidarias te puedan encontrar.\
             <br>Si tienes un problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a>\
+=======
+        help_text=mark_safe('<p style="margin-bottom:5px;font-size:10px;">Seleccioná tu ubicación para que la gente pueda encontrarte, \
+            si no quieres marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.\
+            <br>Si tienes problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a>\
+>>>>>>> d78cac081422779c3293cbec99a6d6c9ea567bb4
             </p><p id="div_direccion" style="font-size: 10px; margin-bottom: 5px;"></p>'),
         srid=4326,
     )
