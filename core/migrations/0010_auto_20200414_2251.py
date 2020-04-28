@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='helprequest',
             name='location',
-            field=django.contrib.gis.db.models.fields.PointField(help_text='<p style="margin-bottom:5px;font-size:10px;">Seleccioná tu ubicación para que la gente pueda encontrarte, si no querés marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.            <br>Si tenés problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a></p><p id="div_direccion" style="font-size: 10px; margin-bottom: 5px;"></p>', srid=4326, verbose_name='Ubicación'),
+            field=django.contrib.gis.db.models.fields.PointField(help_text='<p style="margin-bottom:5px;font-size:10px;">Seleccioná tu ubicación para que la gente pueda encontrarte, si no quieres marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.            <br>Si tienes problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a></p><p id="div_direccion" style="font-size: 10px; margin-bottom: 5px;"></p>', srid=4326, verbose_name='Ubicación'),
         ),
         migrations.CreateModel(
             name='HistoricalHelpRequest',
@@ -30,8 +30,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=200, verbose_name='Nombre y Apellido')),
                 ('phone', models.CharField(max_length=30, verbose_name='Teléfono de contacto')),
                 ('address', models.CharField(help_text='Para ayudar a quien quiera ayudarte saber la dirección, ciudad, barrio, referencias, o cómo llegar', max_length=400, null=True, verbose_name='Dirección')),
-                ('location', django.contrib.gis.db.models.fields.PointField(help_text='<p style="margin-bottom:5px;font-size:10px;">Seleccioná tu ubicación para que la gente pueda encontrarte, si no querés marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.            <br>Si tenés problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a></p><p id="div_direccion" style="font-size: 10px; margin-bottom: 5px;"></p>', srid=4326, verbose_name='Ubicación')),
-                ('picture', models.TextField(blank=True, help_text='Si querés puedes adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación', max_length=100, null=True, verbose_name='Foto')),
+                ('location', django.contrib.gis.db.models.fields.PointField(help_text='<p style="margin-bottom:5px;font-size:10px;">Seleccioná tu ubicación para que la gente pueda encontrarte, si no quieres marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.            <br>Si tienes problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a></p><p id="div_direccion" style="font-size: 10px; margin-bottom: 5px;"></p>', srid=4326, verbose_name='Ubicación')),
+                ('picture', models.TextField(blank=True, help_text='Si quieres puedes adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación', max_length=100, null=True, verbose_name='Foto')),
                 ('active', models.BooleanField(db_index=True, default=True)),
                 ('added', models.DateTimeField(blank=True, db_index=True, editable=False, null=True, verbose_name='Agregado')),
                 ('upvotes', models.IntegerField(blank=True, default=0)),
