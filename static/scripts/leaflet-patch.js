@@ -37,7 +37,13 @@
         .replace(/^url\([\"\']?/, '')
         .replace(/marker-icon[\.[a-zA-Z0-9]*\.png[\"\']?\)$/, '');
     }
-
+    
     return path;
   };
+
+  L.map('id_location-map').on('map:loadfield', function (e) {
+    // Customize map for field
+    console.log('init map te encontre... ');
+    console.log(e.field, e.fieldid);
+});
 })();

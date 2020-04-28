@@ -58,35 +58,33 @@
 
   function getDireccion(longitude, latitude) {
     return new Promise(function(resolve, reject){
-      fetch(`https://geo.cabu.dev/v1/geoinversa/${latitude}/${longitude}`)
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
         .then((response) => response.json())
         .then((data) => {
-          const direccion = data.data;
-          if(direccion.atadireccion == undefined){
-            console.log('undifened date location...')
+          const direccion1 = data.address;
+          const dir = data.display_name;
+          if(direccion1 == undefined){
+            console.log('undifened date location...');
           }
-          //console.log('Return data url ' + direccion)
+          // console.log('Return data url ' + dir);
           document.getElementById('div_direccion').innerHTML = `
-          <span><b>Calles</b>:${direccion.atadireccion || ''}</span><br /> 
-          <span><b>Barrio</b>:${direccion.localidad || '' }</span><br /> 
-          <span><b>Ciudad</b>:${direccion.distrito || ''} <span> <span><b>Provincia</b>:${direccion.departamento || ''}</span>`;
-          document.getElementById('id_address').value = `${direccion.direccion || ''} ${direccion.localidad || '' } ${direccion.distrito || ''} ${direccion.departamento || ''}`;
-          resolve(true)
+          <span><b>Calles</b>:${direccion1.road || ''}</span><br /> 
+          <span><b>Parroquia</b>:${direccion1.city_district || '' }</span><br /> 
+          <span><b>Ciudad</b>:${direccion1.county || ''} <span> <span><b>Provincia</b>:${direccion1.state || ''}</span>`;
+          document.getElementById('id_address').value = `${direccion1.state || ''} ${direccion1.county || ''} ${direccion1.city_district || '' } ${direccion1.road || ''}`;
+          resolve(true);
         })
         .catch((error) => {
+          console.log('Return data url ' + error)
           resolve(true)
         })
     })
+
   }
 
   function geoFindMe() {
-
     const status = document.querySelector('#status');
     const boton = document.querySelector('#find-me');
-
-    //var searchLayer = L.layerGroup().addTo(maps[0]);
-    //... adding data in searchLayer ...
-    //maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
 
     function makePoint(longitude, latitude) {
       return JSON.stringify({
@@ -97,33 +95,12 @@
 
     async function addMarker(longitude, latitude) {
       document.getElementById('id_location').innerHTML = makePoint(longitude, latitude);
-      
-/*
-      var map = maps[0];
 
-    // create the geocoding control and add it to the map
-    var searchControl = L.esri.Geocoding.geosearch().addTo(map);
-
-    // create an empty layer group to store the results and add it to the map
-    var results = L.layerGroup().addTo(map);
-
-    // listen for the results event and add every result to the map
-    searchControl.on("results", function(data) {
-        results.clearLayers(); 
-        for (var i = data.results.length - 1; i >= 0; i--) {
-          console.log('>>>>>>>>>>>>> ' + data.results[i]);  
-            results.addLayer(L.marker(data.results[i].latlng));
-        }
-    });
-    */
       await getDireccion(longitude, latitude);
 
       const you = L.marker([latitude, longitude], {draggable: true, opacity: 0.9, title:'Tu ubicación'}).addTo(maps[0]);
-
       you.bindPopup('<b>Mueve este punto a tu ubicación !</b>').openPopup();
-      
       maps[0].setView([latitude, longitude], 10);
-
       you.on('dragend', async function (e) {
         await getDireccion(e.target._latlng.lng, e.target._latlng.lat);
         document.getElementById('id_location').innerHTML = makePoint(e.target._latlng.lng, e.target._latlng.lat);
@@ -258,7 +235,7 @@ var geosearchControl = L.esri.Geocoding.geosearch({
     geocoder.geocode().text('New York City').run(function (error, response) {
       if (error) {
         return;
-      }
+      }///////
       console.log('response.results[0],  ' + response.results[0]);
       console.log('response.results[0] ' + response.results[0].bounds);
       map.fitBounds(response.results[0].bounds);
@@ -268,5 +245,24 @@ var geosearchControl = L.esri.Geocoding.geosearch({
 
   document.querySelector('#find-me').addEventListener('click', geoFindMe);
   document.querySelector("#provicia_id").addEventListener('change', centerCapital)
+  window.addEventListener("map:init", function(event){
+    // console.log(event.detail.map);
+    var map = event.detail.map;
+    var searchLayer = L.layerGroup().addTo(map);
+
+    map.addControl( new L.Control.Search({
+      textErr: 'Ciudad no encontrada.',
+      textPlaceholder: 'Buscar...',
+      url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&counrty=Ecuador',
+      jsonpParam: 'json_callback',
+      propertyName: 'display_name',
+      propertyLoc: ['lat','lon'],
+      //marker: L.circleMarker([0,0],{radius:30}),
+      autoCollapse: true,
+      autoType: false,
+      position: 'topleft',
+      minLength: 2
+    }) );
+  });
 </script>
 {% endblock %}

@@ -44,9 +44,9 @@ def view_donation_center(request, id):
         "donation_center": donation_center,
         "name": donation_center.name,
         "phone_number_img": image_to_base64(text_to_image(donation_center.phone, 300, 50)) if donation_center.phone else None,
-        "whatsapp": '595'+donation_center.phone[1:]+'?text=Hola+'+donation_center.name
+        "whatsapp": '593'+donation_center.phone[1:]+'?text=Hola+'+donation_center.name
                     + ',+te+escribo+por+el+anuncio+de+donación+que+hiciste:+'
-                    + '+https:'+'/'+'/'+'ayudapy.org/donaciones/'+donation_center.id.__str__() if donation_center.phone else None,
+                    + '+https:'+'/'+'/'+'ayudaec.org/donaciones/'+donation_center.id.__str__() if donation_center.phone else None,
     }
 
     return render(request, "donation_center/details.html", context)

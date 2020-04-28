@@ -101,13 +101,13 @@ class HelpRequest(models.Model):
     title = models.CharField(
         "Título del pedido",
         max_length=200,
-        help_text="Descripción corta de qué estás necesitando",
+        help_text="Descripción corta de lo que necesitas.",
         db_index=True,
     )
     message = models.TextField(
         "Descripción del pedido",
         help_text=mark_safe(
-            "Acá puedes contar detalladamente lo que necesitás, <b>cuanto mejor cuentes tu situación es más probable que te quieran ayudar</b>"),
+            "Aqui puedes describir detalladamente lo que necesitás, <b>cuanto mejor describas tu situación es más probable que te quieran ayudar</b>"),
         max_length=2000,
         null=True,
         db_index=True,
@@ -120,23 +120,22 @@ class HelpRequest(models.Model):
     #ciudad = models.ManyToOneRel(Ciudades, blank=True)
     address = models.CharField(
         "Dirección",
-        help_text="Para ayudar a quien quiera ayudarte saber la dirección, ciudad, barrio, referencias, o cómo llegar",
+        help_text="Para ayudar a quien quiera ayudarte debe saber la dirección, ciudad, barrio, referencias, o cómo llegar",
         max_length=400,
         blank=False,
         null=True,
     )
     location = models.PointField(
         "Ubicación",
-        help_text=mark_safe('<p style="margin-bottom:5px;font-size:10px;">Seleccioná tu ubicación para que la gente pueda encontrarte, \
-            si no querés marcar tu casa una buena opción puede ser la comisaría más cercana o algún otro sitio público cercano.\
-            <br>Si tenés problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a>\
+        help_text=mark_safe('<p style="margin-bottom:5px;font-size:10px;">Selecciona tu ubicación para que las personas solidarias te puedan encontrar.\
+            <br>Si tienes un problemas con este paso <a href="#" class="is-link modal-button" data-target="#myModal" aria-haspopup="true">mira esta ayuda</a>\
             </p><p id="div_direccion" style="font-size: 10px; margin-bottom: 5px;"></p>'),
         srid=4326,
     )
     picture = models.ImageField(
         "Foto",
         upload_to=rename_img,
-        help_text="Si querés puedes adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación",
+        help_text="Si quieres puedes adjuntar una foto relacionada con tu pedido, es opcional pero puede ayudar a que la gente entienda mejor tu situación",
         null=True,
         blank=True,
     )
