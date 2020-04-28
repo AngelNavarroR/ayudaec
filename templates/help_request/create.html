@@ -44,8 +44,8 @@
             <button class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-            <li class="is-size-7"> Mové el mapa hasta donde veas tu ubicación y luego apretá en el icono <i class="fas fa-map-marker-alt"></i> y luego marcá en el mapa el punto exacto</li>
-            <li class="is-size-7"> Si te equivocaste podés apretar en el icono <i class="fas fa-edit"></i> así podés mover el marcador, una vez corregido apretar 'Grabar' </li>
+            <li class="is-size-7"> Mueve el mapa hasta donde veas tu ubicación y luego apretá en el icono <i class="fas fa-map-marker-alt"></i> y luego marcá en el mapa el punto exacto</li>
+            <li class="is-size-7"> Si te equivocaste puedes apretar en el icono <i class="fas fa-edit"></i> así puedes mover el marcador, una vez corregido apretar 'Grabar' </li>
                 <p class="image"><img src="{% static "img/ayudamapa.gif" %}" alt=""></p>
         </section>
         <footer class="modal-card-foot">
@@ -69,7 +69,7 @@
           document.getElementById('div_direccion').innerHTML = `
           <span><b>Calles</b>:${direccion.atadireccion || ''}</span><br /> 
           <span><b>Barrio</b>:${direccion.localidad || '' }</span><br /> 
-          <span><b>Ciudad</b>:${direccion.distrito || ''} <span> <span><b>Departamento</b>:${direccion.departamento || ''}</span>`;
+          <span><b>Ciudad</b>:${direccion.distrito || ''} <span> <span><b>Provincia</b>:${direccion.departamento || ''}</span>`;
           document.getElementById('id_address').value = `${direccion.direccion || ''} ${direccion.localidad || '' } ${direccion.distrito || ''} ${direccion.departamento || ''}`;
           resolve(true)
         })
@@ -105,7 +105,7 @@
               '<span class="my-div-span">Tu Ubicacion</span>'
     })
       */
-      you.bindPopup('<b>Mové este punto a tu ubicación !</b>').openPopup();
+      you.bindPopup('<b>Mueve este punto a tu ubicación !</b>').openPopup();
       
       maps[0].setView([latitude, longitude], 10);
 
@@ -134,7 +134,7 @@
 
       boton.textContent = 'No te encontré, seguí completando !';
       boton.disabled = true;
-      status.textContent = 'No puedo encontrarte, mové el punto mas abajo.';
+      status.textContent = 'No puedo encontrarte, mueve el punto mas abajo.';
 
       addMarker(longitude, latitude);
       

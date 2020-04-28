@@ -6,9 +6,9 @@
     <nav class="pagination is-right" role="navigation" aria-label="pagination">
         <!-- previous (<<) nav button -->
         {% if list_paginated.has_previous %}
-            <a href="?page={{ list_paginated.previous_page_number }}{% if search %}&q={{ search }}{% endif %}" class="pagination-previous">Previo</a>
+            <a href="?page={{ list_paginated.previous_page_number }}{% if search %}&q={{ search }}{% endif %}" class="pagination-previous">Anterior</a>
         {% else %}
-            <a class="pagination-previous" disabled>Previo</a>
+            <a class="pagination-previous" disabled>Anterior</a>
         {% endif %}
 
          <!-- next (>>) nav button -->

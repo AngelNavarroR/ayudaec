@@ -54,7 +54,7 @@ class HelpRequestForm(forms.ModelForm):
             "address": forms.TextInput(attrs={"class": "input"}),
             'categories': forms.SelectMultiple(attrs={"style": "display:none;"}),
             "provincia": forms.Select(attrs={"id": "provicia_id",
-                    "placeholder": "Selecciones una provincia"}),
+                    "placeholder": "Seleccione una provincia"}),
         }
         error_messages = {
             NON_FIELD_ERRORS: {
