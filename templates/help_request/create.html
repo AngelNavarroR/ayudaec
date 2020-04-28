@@ -84,9 +84,9 @@
     const status = document.querySelector('#status');
     const boton = document.querySelector('#find-me');
 
-    var searchLayer = L.layerGroup().addTo(maps[0]);
+    //var searchLayer = L.layerGroup().addTo(maps[0]);
     //... adding data in searchLayer ...
-    maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
+    //maps[0].addControl( new L.Control.Search({layer: searchLayer}) );
 
     function makePoint(longitude, latitude) {
       return JSON.stringify({
